@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Custom application secret properties (sensitive data)
+src/main/resources/application-secret.properties
