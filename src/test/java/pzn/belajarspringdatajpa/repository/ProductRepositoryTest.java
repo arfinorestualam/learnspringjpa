@@ -3,6 +3,8 @@ package pzn.belajarspringdatajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
@@ -62,6 +64,23 @@ class ProductRepositoryTest {
         assertEquals(2, products.size());
         assertEquals("Iphone 16", products.get(1).getName());
         assertEquals("Iphone 8", products.get(0).getName());
+    }
+
+    @Test
+    void findProductWithPageable() {
+        //for searching page 0
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Order.desc("id")));
+        //see don't need sort, cause pageable can handle it.
+        List<Product> products = productRepository.findAllByCategory_Name("Category 0", pageable);
+        assertEquals(1, products.size());
+        assertEquals("Iphone 8", products.get(0).getName());
+
+        //for searching page 1
+        pageable = PageRequest.of(1, 1, Sort.by(Sort.Order.desc("id")));
+        products = productRepository.findAllByCategory_Name("Category 0", pageable);
+
+        assertEquals(1, products.size());
+        assertEquals("Iphone 16", products.get(0).getName());
     }
 
 }
