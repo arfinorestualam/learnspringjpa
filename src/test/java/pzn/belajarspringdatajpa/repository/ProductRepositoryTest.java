@@ -3,6 +3,7 @@ package pzn.belajarspringdatajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
 
@@ -48,6 +49,19 @@ class ProductRepositoryTest {
         assertEquals(2, products.size());
         assertEquals("Iphone 16", products.get(0).getName());
         assertEquals("Iphone 8", products.get(1).getName());
+    }
+
+    @Test
+    void findProductSort() {
+        //fyi: sort can be multiple argument, just add , at the end of sort
+        //this means, sort by id descending :
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        //adding sort here, it'll reverse the test of findProducts()
+        //cause the id will be sort from the last
+        List<Product> products = productRepository.findAllByCategory_Name("Category 0", sort);
+        assertEquals(2, products.size());
+        assertEquals("Iphone 16", products.get(1).getName());
+        assertEquals("Iphone 8", products.get(0).getName());
     }
 
 }
