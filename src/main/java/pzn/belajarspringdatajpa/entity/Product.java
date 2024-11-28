@@ -6,15 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+//need this annotation to tell the class it's entity
 @Entity
-@Table(name = "categories")
-public class Category {
+//must have this annotation to refer name of table in the db
+@Table(name = "products")
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,10 @@ public class Category {
 
     private String name;
 
-    //cause it's one to many, need this annotation
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
+    private Long price;
+
+    //need this annotation because it's refer to category
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
 }
