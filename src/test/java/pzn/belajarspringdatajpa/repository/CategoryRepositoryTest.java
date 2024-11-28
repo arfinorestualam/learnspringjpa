@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import pzn.belajarspringdatajpa.entity.Category;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,5 +49,16 @@ class CategoryRepositoryTest {
 
         categoryRepository.delete(category);
         assertEquals(Optional.empty(),categoryRepository.findById(1L));
+    }
+
+    @Test
+    void testQueryMethod() {
+        Category category = categoryRepository.findFirstByNameEquals("Category 0").orElse(null);
+        assertNotNull(category);
+        assertEquals("Category 0", category.getName());
+
+        List<Category> categories = categoryRepository.findAllByNameLike("%Category%");
+        assertEquals(10, categories.size());
+        assertEquals("Category 0", categories.get(0).getName());
     }
 }
