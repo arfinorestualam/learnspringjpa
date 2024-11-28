@@ -1,5 +1,6 @@
 package pzn.belajarspringdatajpa.repository;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,5 +19,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     //using Pageable for paging, you don't need sort when use pageable
     //cause pageable handling sort too.
-    List<Product> findAllByCategory_Name(String name, Pageable pageable);
+    //List<Product> findAllByCategory_Name(String name, Pageable pageable);
+
+    //if you want to know page result (total page, total item from query)
+    //just change the list, to Page, but the parameter must Pageable
+    Page<Product> findAllByCategory_Name(String name, Pageable pageable);
 }
