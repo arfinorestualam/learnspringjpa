@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 import pzn.belajarspringdatajpa.entity.Product;
 
 import java.util.List;
@@ -36,5 +37,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //to delete data
     //just use in front the name of method deleteBy
     //use int because we want to know how many data we delete
+    //adding @Transactional, because simple jpa repository for custom query method
+    //only use read only, we can't use save/put, delete which need transactional,
+    //cause of that we need annotation above.
+    @Transactional
     int deleteByName(String name);
 }

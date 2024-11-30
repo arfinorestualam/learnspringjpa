@@ -117,8 +117,9 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void testDelete() {
+    void testDeleteOld() {
         //because delete is not read only, we use transactional operation
+        //fyi, this operation will run in one transaction
         transactionOperations.executeWithoutResult(transactionStatus -> {
             Category category = categoryRepository.findById(10L).orElse(null);
             assertNotNull(category);
@@ -137,6 +138,28 @@ class ProductRepositoryTest {
             assertEquals(0, delete);
         });
         //if we don't use transaction, the test will fail, cause it need transaction operation
+    }
+
+    @Test
+    void testDeleteNew() {
+        //because we add transactional in repository, we don't need transactional operation again
+        //but in this test, we run 3 transactional
+        //so there is no roll back, if transaction 1 success, it'll be input even transaction 2and3 failed
+        Category category = categoryRepository.findById(10L).orElse(null);
+        assertNotNull(category);
+
+        Product product = new Product();
+        product.setName("Iphone 10");
+        product.setPrice(25_0000_0000L);
+        product.setCategory(category);
+        productRepository.save(product); //this transaction 1
+
+        int delete = productRepository.deleteByName("Iphone 10"); // this transaction 2
+        assertEquals(1, delete);
+
+        //test not exist
+        delete = productRepository.deleteByName("Iphone 10"); //transaction 3
+        assertEquals(0, delete);
     }
 
 }
