@@ -100,6 +100,7 @@ class ProductRepositoryTest {
         //on other hand, this count will be counting according what we want:
         count = productRepository.countByCategory_Name("Category 0");
         assertEquals(2L, count);
+
     }
 
 }

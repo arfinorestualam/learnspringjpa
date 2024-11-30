@@ -28,4 +28,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //count query method, just like using normal query, since we need data
     //from category name, we add _ to join, just use count in front the name of method
     Long countByCategory_Name(String name);
+
 }
