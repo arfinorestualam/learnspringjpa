@@ -24,4 +24,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //if you want to know page result (total page, total item from query)
     //just change the list, to Page, but the parameter must Pageable
     Page<Product> findAllByCategory_Name(String name, Pageable pageable);
+
+    //count query method, just like using normal query, since we need data
+    //from category name, we add _ to join, just use count in front the name of method
+    Long countByCategory_Name(String name);
 }
