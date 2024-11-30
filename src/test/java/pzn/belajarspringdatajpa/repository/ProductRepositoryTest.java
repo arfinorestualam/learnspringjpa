@@ -179,4 +179,40 @@ class ProductRepositoryTest {
         assertEquals("Iphone 16", products.get(0).getName());
     }
 
+    @Test
+    void searchProductLike() {
+        List<Product> products = productRepository.searchProduct("%Iphone%");
+        assertEquals(2, products.size());
+
+        products = productRepository.searchProduct("%Category%");
+        assertEquals(2, products.size());
+    }
+
+    @Test
+    void searchProductLikePageable() {
+        Pageable pageable = PageRequest.of(0,1, Sort.by(Sort.Order.desc("id")));
+        List<Product> products = productRepository.searchProductPageable("%Iphone%", pageable);
+        assertEquals(1, products.size());
+
+        products = productRepository.searchProductPageable("%Category%", pageable);
+        assertEquals(1, products.size());
+    }
+
+    @Test
+    void searchProductLikePageResult() {
+        Pageable pageable = PageRequest.of(0,1, Sort.by(Sort.Order.desc("id")));
+        Page<Product> products = productRepository.searchProductPageResult("%Iphone%", pageable);
+        assertEquals(1, products.getContent().size());
+
+        assertEquals(2, products.getTotalPages());
+        assertEquals(2, products.getTotalElements());
+        assertEquals(0, products.getNumber());
+
+        products = productRepository.searchProductPageResult("%Category%", pageable);
+        assertEquals(1, products.getContent().size());
+        assertEquals(2, products.getTotalPages());
+        assertEquals(2, products.getTotalElements());
+        assertEquals(0, products.getNumber());
+    }
+
 }

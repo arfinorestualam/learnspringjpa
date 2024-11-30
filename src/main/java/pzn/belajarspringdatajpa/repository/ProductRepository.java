@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import pzn.belajarspringdatajpa.entity.Product;
@@ -50,4 +51,22 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     //add pageable
     List<Product> searchProductUsingNamePageable(@Param("name") String name, Pageable pageable);
+
+    //Query annotation, if the query method to long and need a lot parameters.
+    //using @Query will be helpful, in bellow, a lot name is required, it simplify using query.
+    @Query(value = "select p from Product p where p.name like :name or p.category.name like :name")
+    List<Product> searchProduct(@Param("name") String name);
+    //in above we can use 1 parameter but use in 2 like query, for name or category name
+
+    //Query annotation support both Pageable and sort
+    @Query(value = "select p from Product p where p.name like :name or p.category.name like :name")
+    List<Product> searchProductPageable(@Param("name") String name, Pageable pageable);
+
+    //Query annotation with page result
+    @Query(
+            value = "select p from Product p where p.name like :name or p.category.name like :name",
+            countQuery = "select count(p) from Product p where p.name like :name or p.category.name like :name"
+    )
+    Page<Product> searchProductPageResult(@Param("name") String name, Pageable pageable);
+
 }
