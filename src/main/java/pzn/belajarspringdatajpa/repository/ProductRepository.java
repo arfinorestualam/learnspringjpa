@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import pzn.belajarspringdatajpa.entity.Product;
 
@@ -42,4 +43,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //cause of that we need annotation above.
     @Transactional
     int deleteByName(String name);
+
+    //now in repository we can call the method, without the entity
+    //the param need so the program now that param name will be fill with param name from method
+    List<Product> searchProductUsingName(@Param("name") String name);
+
+    //add pageable
+    List<Product> searchProductUsingNamePageable(@Param("name") String name, Pageable pageable);
 }

@@ -162,4 +162,21 @@ class ProductRepositoryTest {
         assertEquals(0, delete);
     }
 
+    @Test
+    void searchProduct() {
+        List<Product> products = productRepository.searchProductUsingName("Iphone 16");
+
+        assertEquals(1, products.size());
+        assertEquals("Iphone 16", products.get(0).getName());
+    }
+
+    @Test
+    void searchProductPageable() {
+        Pageable pageable = PageRequest.of(0,1);
+        List<Product> products = productRepository.searchProductUsingNamePageable("Iphone 16", pageable);
+
+        assertEquals(1, products.size());
+        assertEquals("Iphone 16", products.get(0).getName());
+    }
+
 }
