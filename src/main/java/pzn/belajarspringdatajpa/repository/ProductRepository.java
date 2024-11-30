@@ -32,4 +32,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //to check existing data
     //just use in front the name of method existBy
     boolean existsByName(String name);
+
+    //to delete data
+    //just use in front the name of method deleteBy
+    //use int because we want to know how many data we delete
+    int deleteByName(String name);
 }

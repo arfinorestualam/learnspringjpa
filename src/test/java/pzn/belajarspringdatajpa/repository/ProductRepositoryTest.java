@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.support.TransactionOperations;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
 
@@ -22,6 +23,9 @@ class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private TransactionOperations transactionOperations;
 
     @Test
     void createProduct() {
@@ -110,6 +114,29 @@ class ProductRepositoryTest {
 
         exists = productRepository.existsByName("Iphone 10");
         assertFalse(exists);
+    }
+
+    @Test
+    void testDelete() {
+        //because delete is not read only, we use transactional operation
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+            Category category = categoryRepository.findById(10L).orElse(null);
+            assertNotNull(category);
+
+            Product product = new Product();
+            product.setName("Iphone 10");
+            product.setPrice(25_0000_0000L);
+            product.setCategory(category);
+            productRepository.save(product);
+
+            int delete = productRepository.deleteByName("Iphone 10");
+            assertEquals(1, delete);
+
+            //test not exist
+            delete = productRepository.deleteByName("Iphone 10");
+            assertEquals(0, delete);
+        });
+        //if we don't use transaction, the test will fail, cause it need transaction operation
     }
 
 }
