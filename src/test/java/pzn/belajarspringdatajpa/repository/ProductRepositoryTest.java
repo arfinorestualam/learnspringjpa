@@ -103,4 +103,13 @@ class ProductRepositoryTest {
 
     }
 
+    @Test
+    void testExists() {
+        boolean exists = productRepository.existsByName("Iphone 16");
+        assertTrue(exists);
+
+        exists = productRepository.existsByName("Iphone 10");
+        assertFalse(exists);
+    }
+
 }

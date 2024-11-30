@@ -29,4 +29,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //from category name, we add _ to join, just use count in front the name of method
     Long countByCategory_Name(String name);
 
+    //to check existing data
+    //just use in front the name of method existBy
+    boolean existsByName(String name);
 }
