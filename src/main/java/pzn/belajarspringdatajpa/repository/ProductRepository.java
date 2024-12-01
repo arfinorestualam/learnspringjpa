@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,11 +63,32 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "select p from Product p where p.name like :name or p.category.name like :name")
     List<Product> searchProductPageable(@Param("name") String name, Pageable pageable);
 
-    //Query annotation with page result
+    //Query annotation with page result, need to add countQuery
     @Query(
             value = "select p from Product p where p.name like :name or p.category.name like :name",
             countQuery = "select count(p) from Product p where p.name like :name or p.category.name like :name"
     )
     Page<Product> searchProductPageResult(@Param("name") String name, Pageable pageable);
+
+    //@Modifying an annotation that use to inform spring, that this isn't just query
+    //but modify query (update or delete)
+    @Modifying
+    @Query("delete from Product p where p.name = :name")
+    int deleteProductUsingName(@Param("name") String name);
+
+    @Modifying
+    @Query("update Product p set p.price = 0 where p.id = :id")
+    int updateProductPriceToZero(@Param("id") Long id);
+
+    //it can use @Transactional too
+    @Transactional
+    @Modifying
+    @Query("delete from Product p where p.name = :name")
+    int deleteProductName(@Param("name") String name);
+
+    @Transactional
+    @Modifying
+    @Query("update Product p set p.price = 0 where p.id = :id")
+    int updateProductPriceZero(@Param("id") Long id);
 
 }

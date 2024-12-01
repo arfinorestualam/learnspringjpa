@@ -215,4 +215,36 @@ class ProductRepositoryTest {
         assertEquals(0, products.getNumber());
     }
 
+    //because we didn't use @Transactional, now using Transaction Operations
+    //for testing modifying
+    @Test
+    void modifying() {
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+            int total = productRepository.deleteProductUsingName("Wrong");
+            assertEquals(0, total);
+
+            total = productRepository.updateProductPriceToZero(1L);
+            assertEquals(1, total);
+
+            Product product = productRepository.findById(1L).orElse(null);
+            assertNotNull(product);
+            assertEquals(0L, product.getPrice());
+        });
+    }
+
+    //testing modifying using @Transactional
+    @Test
+    void modifyingTransactional() {
+
+        int total = productRepository.deleteProductName("Wrong");
+        assertEquals(0, total);
+
+        total = productRepository.updateProductPriceZero(1L);
+        assertEquals(1, total);
+
+        Product product = productRepository.findById(1L).orElse(null);
+        assertNotNull(product);
+        assertEquals(0L, product.getPrice());
+    }
+
 }
