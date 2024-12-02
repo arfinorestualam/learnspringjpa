@@ -3,10 +3,7 @@ package pzn.belajarspringdatajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.transaction.support.TransactionOperations;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
@@ -264,6 +261,24 @@ class ProductRepositoryTest {
             //if you write not with transaction operation or @Transactional
             stream.forEach(product -> System.out.println(product.getId() + " : " + product.getName()));
         });
+    }
+
+    //testing slice
+    @Test
+    void slice() {
+        Pageable pageable = PageRequest.of(0,1);
+
+        Category category = categoryRepository.findById(10L).orElse(null);
+        assertNotNull(category);
+
+        Slice<Product> slice = productRepository.findAllByCategory(category, pageable);
+        //cause slice know is next data available or not, we can use while
+        //to find all next data
+        while (slice.hasNext()) {
+            //slice have next page, to get data from next page
+            //if you want previous page, just use previousPageable()
+            slice = productRepository.findAllByCategory(category, slice.nextPageable());
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package pzn.belajarspringdatajpa.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -97,5 +98,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //we can do find all with stream, which lazy and take it slowly, not load all data
     //just use Stream if you want use stream
     Stream<Product> streamAllByCategory(Category category);
+
+    //spring provide slice, it beyond page, cause it can know what previous and next page is available or not
+    //how to use it :
+    Slice<Product>  findAllByCategory(Category category, Pageable pageable);
+    //cause slice is like page but advance, need param pageable too
 
 }
