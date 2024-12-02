@@ -281,4 +281,34 @@ class ProductRepositoryTest {
         }
     }
 
+    //testing lock, because we use pessimistic write type of lock
+    //lock2 will be wait lock1 process.
+    //and remember it run in transaction, so need @Transactional or transaction operations
+    @Test
+    void lock1() {
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+           try {
+               Product product = productRepository.findFirstByIdEquals(1L).orElse(null);
+               assertNotNull(product);
+
+               product.setPrice(30_0000_000L);
+               Thread.sleep(30_000L);
+               productRepository.save(product);
+           } catch (InterruptedException e) {
+               throw new RuntimeException(e);
+           }
+        });
+    }
+
+    @Test
+    void lock2() {
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+           Product product = productRepository.findFirstByIdEquals(1L).orElse(null);
+           assertNotNull(product);
+           product.setPrice(10_0000_000L);
+           productRepository.save(product);
+
+        });
+    }
+
 }

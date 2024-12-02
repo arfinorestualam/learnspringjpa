@@ -1,10 +1,12 @@
 package pzn.belajarspringdatajpa.repository;
 
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +15,7 @@ import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -103,5 +106,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //how to use it :
     Slice<Product>  findAllByCategory(Category category, Pageable pageable);
     //cause slice is like page but advance, need param pageable too
+
+    //lock is a method to control how data locked when access database.
+    //imagine your db is access by many users, you need something that prevent
+    //data mix up and the user get wrong data from what they expected.
+    //you just need annotation @Lock and write mode that you need
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<Product> findFirstByIdEquals(Long id);
 
 }
