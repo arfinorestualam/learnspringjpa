@@ -12,6 +12,7 @@ import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -245,6 +246,24 @@ class ProductRepositoryTest {
         Product product = productRepository.findById(1L).orElse(null);
         assertNotNull(product);
         assertEquals(0L, product.getPrice());
+    }
+
+    //testing stream
+    @Test
+    void stream() {
+        //why we use transaction operations ? cause stream is close when transaction isn't active
+        //that's why use transaction operations that the cycle still alive (except is close by other)
+        //and you can use the data from stream
+        //that will happen if do it with annotation @Transactional too
+        transactionOperations.executeWithoutResult(transactionStatus -> {
+           Category category = categoryRepository.findById(10L).orElse(null);
+           assertNotNull(category);
+
+            Stream<Product> stream = productRepository.streamAllByCategory(category);
+            //code below will not run, and the test is error, cause the transaction close
+            //if you write not with transaction operation or @Transactional
+            stream.forEach(product -> System.out.println(product.getId() + " : " + product.getName()));
+        });
     }
 
 }

@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
@@ -90,5 +92,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Modifying
     @Query("update Product p set p.price = 0 where p.id = :id")
     int updateProductPriceZero(@Param("id") Long id);
+
+    //cause using find all query in list may crash cause of out of memory
+    //we can do find all with stream, which lazy and take it slowly, not load all data
+    //just use Stream if you want use stream
+    Stream<Product> streamAllByCategory(Category category);
 
 }
