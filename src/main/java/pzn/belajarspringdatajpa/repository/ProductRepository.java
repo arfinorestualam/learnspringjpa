@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
+import pzn.belajarspringdatajpa.model.SimpleProduct;
 
 import java.util.List;
 import java.util.Optional;
@@ -118,5 +119,11 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     //without we set the data.
 
     //for spec, you can jump to test too.
+
+    //projection, it is a feature for choose which column from table that needed
+    //example, we only need id and name from product so we can do like this :
+    List<SimpleProduct> findAllByNameLike(String name);
+    //in above, we use interface to determine which column we need from table
+    //and yes, it must be interface.
 
 }

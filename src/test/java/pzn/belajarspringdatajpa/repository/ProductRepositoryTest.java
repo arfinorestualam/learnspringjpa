@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.support.TransactionOperations;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
+import pzn.belajarspringdatajpa.model.SimpleProduct;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -342,6 +343,15 @@ class ProductRepositoryTest {
         List<Product> products = productRepository.findAll(specification);
         assertEquals(2, products.size());
 
+    }
+
+    //test projection
+    @Test
+    void projection() {
+        List<SimpleProduct> simpleProducts = productRepository.findAllByNameLike("%Iphone%");
+        assertEquals(2, simpleProducts.size());
+        //look at the result test, in product there is a lot of column, but when we use
+        //projection, only column that determined in interface is select
     }
 
 }
