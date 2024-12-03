@@ -9,6 +9,7 @@ import org.springframework.transaction.support.TransactionOperations;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
 import pzn.belajarspringdatajpa.model.SimpleProduct;
+import pzn.belajarspringdatajpa.model.SimpleProducts;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -352,6 +353,14 @@ class ProductRepositoryTest {
         assertEquals(2, simpleProducts.size());
         //look at the result test, in product there is a lot of column, but when we use
         //projection, only column that determined in interface is select
+    }
+
+    //test java record
+    @Test
+    void record() {
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        List<SimpleProducts> simpleProducts = productRepository.findAllByNameLike("%Iphone%",sort);
+        assertEquals(2, simpleProducts.size());
     }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
 import pzn.belajarspringdatajpa.model.SimpleProduct;
+import pzn.belajarspringdatajpa.model.SimpleProducts;
 
 import java.util.List;
 import java.util.Optional;
@@ -125,5 +126,11 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     List<SimpleProduct> findAllByNameLike(String name);
     //in above, we use interface to determine which column we need from table
     //and yes, it must be interface.
+
+    // If you're wondering why we use an interface, modern Java also provides the 'record' feature.
+    // The functionality is similar, but 'record' acts as a class rather than an interface.
+    //but it only run in java 17 or newer, if it old, just use projection interface.
+    List<SimpleProducts> findAllByNameLike(String name, Sort sort);
+
 
 }
