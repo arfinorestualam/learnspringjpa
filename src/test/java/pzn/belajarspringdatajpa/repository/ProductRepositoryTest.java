@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.support.TransactionOperations;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
@@ -309,6 +310,38 @@ class ProductRepositoryTest {
            productRepository.save(product);
 
         });
+    }
+
+    //test spec
+    @Test
+    void specification() {
+        // i want to search product name is iphone 16, and 8, how i do it with spec?
+        //first, use spec
+        Specification<Product> specification = (root, criteria, builder) -> {
+            // "root" represents the table (or entity). Here, "root" is the Product table.
+            // Using root, we can access columns in the table like "name".
+
+            // "criteria" is used to control the overall query structure,
+            // for example, defining SELECT, WHERE, GROUP BY, etc.
+
+            // "builder" is a helper to construct logical conditions in the query
+            // (e.g., WHERE, AND, OR clauses).
+
+            assert criteria != null;
+            return criteria
+                    .where( // Defines the WHERE clause in the query
+                            builder.or( // Creates an "OR" condition between two expressions
+                                    builder.equal(root.get("name"), "Iphone 16"), // Condition 1: name = "Iphone 16"
+                                    builder.equal(root.get("name"), "Iphone 8")   // Condition 2: name = "Iphone 8"
+                            )
+                    )
+                    .getRestriction(); // Returns the built query restrictions
+        };
+
+        //find all query from spec
+        List<Product> products = productRepository.findAll(specification);
+        assertEquals(2, products.size());
+
     }
 
 }

@@ -9,7 +9,7 @@ CREATE TABLE categories
     PRIMARY KEY (id)
 )ENGINE  InnoDB;
 
-SELECT * FROM categories;
+SELECT * FROM products;
 
 CREATE TABLE products (
     id      BIGINT      NOT NULL    AUTO_INCREMENT,

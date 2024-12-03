@@ -5,10 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import pzn.belajarspringdatajpa.entity.Category;
@@ -18,7 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+//spec is feature from jpa, where you can query complex and dynamically without query
+//first, add extend jpa spec executor and add entity in it.
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
 
     //because Jpa can't handle . like query
     //we need _ for substitute
@@ -115,6 +114,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findFirstByIdEquals(Long id);
 
     //how auditing? auditing is process to know createAt, updateAt, who is update the data
-    //to audit the db.
+    //to audit the db. Please jump to test to see how implement it, the feature will be auto write
+    //without we set the data.
+
+    //for spec, you can jump to test too.
 
 }
