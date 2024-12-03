@@ -64,6 +64,7 @@ class CategoryRepositoryTest {
         assertEquals("Category 0", categories.get(0).getName());
     }
     //example, example is feature from jpa that can be use make query from example entity that we made
+    //is simple rather than using query, but if the data is a lot and complex it's not efficient
     //this is how it make :
     @Test
     void example() {
