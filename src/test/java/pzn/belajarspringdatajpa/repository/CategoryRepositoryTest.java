@@ -3,6 +3,8 @@ package pzn.belajarspringdatajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import pzn.belajarspringdatajpa.entity.Category;
 
 import java.util.List;
@@ -60,5 +62,29 @@ class CategoryRepositoryTest {
         List<Category> categories = categoryRepository.findAllByNameLike("%Category%");
         assertEquals(10, categories.size());
         assertEquals("Category 0", categories.get(0).getName());
+    }
+    //example, example is feature from jpa that can be use make query from example entity that we made
+    //this is how it make :
+    @Test
+    void example() {
+        Category category = new Category();
+        category.setName("Category 0");
+
+        Example<Category> example = Example.of(category);
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(2, categories.size());
+    }
+
+    //example matcher, matching custom data that we want
+    @Test
+    void exampleMatcher() {
+        Category category = new Category();
+        category.setName("category 0");
+
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreNullValues().withIgnoreCase();
+
+        Example<Category> example = Example.of(category, exampleMatcher);
+        List<Category> categories = categoryRepository.findAll(example);
+        assertEquals(2, categories.size());
     }
 }
