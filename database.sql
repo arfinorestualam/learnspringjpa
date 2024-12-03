@@ -19,3 +19,6 @@ CREATE TABLE products (
     primary key (id),
     foreign key fk_products_categories (category_id) REFERENCES categories (id)
 ) ENGINE InnoDB;
+
+ALTER TABLE categories ADD COLUMN created_date TIMESTAMP;
+ALTER TABLE categories ADD COLUMN last_modified_date TIMESTAMP;

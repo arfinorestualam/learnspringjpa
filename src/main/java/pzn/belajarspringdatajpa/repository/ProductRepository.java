@@ -114,4 +114,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Product> findFirstByIdEquals(Long id);
 
+    //how auditing? auditing is process to know createAt, updateAt, who is update the data
+    //to audit the db.
+
 }
