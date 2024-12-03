@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.support.TransactionOperations;
 import pzn.belajarspringdatajpa.entity.Category;
 import pzn.belajarspringdatajpa.entity.Product;
+import pzn.belajarspringdatajpa.model.ProductPrice;
 import pzn.belajarspringdatajpa.model.SimpleProduct;
 import pzn.belajarspringdatajpa.model.SimpleProducts;
 
@@ -361,6 +362,17 @@ class ProductRepositoryTest {
         Sort sort = Sort.by(Sort.Order.desc("id"));
         List<SimpleProducts> simpleProducts = productRepository.findAllByNameLike("%Iphone%",sort);
         assertEquals(2, simpleProducts.size());
+    }
+
+    //test dynamic projection
+    @Test
+    void dynamic() {
+        //this is how we implement the dynamic :
+        List<SimpleProducts> simpleProducts = productRepository.findAllByNameLike("%Iphone%", SimpleProducts.class);
+        assertEquals(2, simpleProducts.size());
+
+        List<ProductPrice> productPrices = productRepository.findAllByNameLike("%Iphone%", ProductPrice.class);
+        assertEquals(2, productPrices.size());
     }
 
 }

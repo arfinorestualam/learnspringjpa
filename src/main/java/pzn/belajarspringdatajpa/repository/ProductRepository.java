@@ -132,5 +132,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     //but it only run in java 17 or newer, if it old, just use projection interface.
     List<SimpleProducts> findAllByNameLike(String name, Sort sort);
 
+    //Dynamic projection, wondering if i have more than 1 record or interface, but need same query method
+    //like above we have findAllByNameLike, how i do it? cause it throw error.
+    //that's why there is Dynamic Projection, a feature that we can have generic method
+    //that will be use later if needed, depend which record/interface that we need
+    <T> List<T> findAllByNameLike(String name, Class<T> tClass);
 
 }
